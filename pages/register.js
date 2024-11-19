@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
 import styles from "./register.styles.module.scss";
 import MainLayout from "./components/layouts/mainlayout";
+import { hashPassword } from "./lib/data-helper";
 
 const defaultFormFields = {
     first_name: '', 
@@ -19,6 +20,22 @@ const defaultFormFields = {
 
 
 function Register()  {
+
+    useEffect(() => {
+        const getUsers = async() => {
+            const fetchDataReservation = await fetch('/api/users',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            const jsonDataReserve = await fetchDataReservation.json();
+            console.log('data to reserve is ', jsonDataReserve);
+        };
+
+        getUsers();
+    }, []);
 
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { first_name, last_name, email, gender, date_of_birth, contact_no, address, password} = formFields;
@@ -39,18 +56,38 @@ function Register()  {
             setErrorMessage('All fields are required');
             return;
         } 
-        formFields.c_password = password;
-        //console.log('form fields are ', formFields);
-        const response = await registerUser(formFields);
-     
-        if(response.success){
-            setSuccessRegister(true);
-            setErrorMessage('');
-        } else {
-            setErrorMessage(response.message);
-            setSuccessRegister(false);
-        }
 
+        formFields.password = await hashPassword(password);
+        formFields.role = 'user';
+        console.log('formFields', formFields);
+
+    
+        try {
+            const fetchData = await fetch('/api/users', {
+                method: 'POST',
+                body: JSON.stringify(formFields),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
+    
+            const jsonData = await fetchData.json();
+            //console.log('data is ', jsonData);
+    
+            if(jsonData.success){
+                setSuccessRegister(true);
+                setErrorMessage('');
+            } else {
+                setErrorMessage('Failed Registering User');
+                setSuccessRegister(false);
+            }
+
+         
+        } catch (error) {
+            console.log('error is ', error);
+        }
+        
     };
 
     return (
@@ -60,7 +97,7 @@ function Register()  {
                 <Col>
 
                     { !successRegister &&
-                        <form className={`${styles.register}`}>
+                        <form onSubmit={onSubmit} className={`${styles.register}`}>
                             <div className="row">
                                 <h2>Register</h2>
                                 <div className="col-md-12">
@@ -109,7 +146,7 @@ function Register()  {
                     { successRegister &&
                         <Alert variant="success mt-5">
                             <Alert.Heading>Success|</Alert.Heading>
-                            <p>You are successfully regietrered. Click <Link to={`/login`}>here</Link> to login</p>
+                            <p>You are successfully regietrered. Click <Link href={`/`}>here</Link> to login</p>
                         </Alert>
                     }
 

@@ -24,6 +24,11 @@
         color: #FFFFFF !important;
         font-weight: 700;
         font-size: 1rem;
+        margin-right: 15px;
+
+        &:last-child {
+            margin-right: 0px;
+        }
 
         &.logout {
             color: red !important;
