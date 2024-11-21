@@ -1,6 +1,13 @@
 import excuteQuery from "@/lib/db";
 import { hashPassword } from "@/lib/data-helper";
 
+const { Vonage } = require('@vonage/server-sdk')
+
+const vonage = new Vonage({
+  apiKey: 'ee67f346',
+  apiSecret: 'GrkesPkDDp2oJXzW'
+})
+
 
 export default async function handler(req, res) {
   
@@ -84,7 +91,16 @@ export default async function handler(req, res) {
           success: true,
           data: result 
         };
-  
+
+        const to = '639562490328';
+        //const to = '639662385023';
+        const from = 'Saint James Parish Church';
+        const text = "Your booking is approved";
+
+        await vonage.sms.send({to, from, text})
+        .then(resp => { console.log('Message sent successfully'); console.log(resp); })
+        .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+      
         res.status(200).json(data);
         
       } catch(error) {
@@ -128,7 +144,7 @@ export default async function handler(req, res) {
         res.status(200).json(data);
       }
 
-      
+
     }
   
   }

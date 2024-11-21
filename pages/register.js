@@ -124,7 +124,7 @@ function Register()  {
                                     <br />
 
                                     <label htmlFor="Contact No.">Contact No.</label>
-                                    <input type="text" className="form-control" id="contact_no" name="contact_no" onChange={handleChange} placeholder="Ex. 0945002551" />
+                                    <input type="text" className="form-control" id="contact_no" name="contact_no" onChange={handleChange} placeholder="Ex. +639450025521" />
                                     <br />
 
                                     <label htmlFor="Address">Address</label>

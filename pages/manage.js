@@ -9,10 +9,9 @@ import moment from "moment";
 
 function Bookings () {
 
+
     const [theStatus, setTheStatus] = useState('');
     const [theAmount, setTheAmount] = useState('');
-
-
 
     const [show, setShow] = useState(false);
 
