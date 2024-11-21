@@ -2,8 +2,8 @@ import Link from "next/link"
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
 import styles from "./register.styles.module.scss";
-import MainLayout from "./components/layouts/mainlayout";
-import { hashPassword } from "./lib/data-helper";
+import MainLayout from "../components/layouts/mainlayout";
+import { hashPassword } from "../lib/data-helper";
 
 const defaultFormFields = {
     first_name: '', 
@@ -21,21 +21,22 @@ const defaultFormFields = {
 
 function Register()  {
 
-    useEffect(() => {
-        const getUsers = async() => {
-            const fetchDataReservation = await fetch('/api/users',{
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    // useEffect(() => {
+    //     const getUsers = async() => {
+    //         const fetchDataReservation = await fetch('/api/users',{
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             }
+    //         });
     
-            const jsonDataReserve = await fetchDataReservation.json();
-            console.log('data to reserve is ', jsonDataReserve);
-        };
+    //         const jsonDataReserve = await fetchDataReservation.json();
+    //         console.log('data to reserve is ', jsonDataReserve);
+    //     };
 
-        getUsers();
-    }, []);
+    //     getUsers();
+    // }, []);
+    
 
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { first_name, last_name, email, gender, date_of_birth, contact_no, address, password} = formFields;

@@ -4,7 +4,22 @@ const { Brand } = Navbar
 import styles from './header.styles.module.scss';
 import Link from "next/link";
 
+import { useSession } from "next-auth/react";
+
+import { signOut } from "next-auth/react";
+
 const Header = () => {
+
+  const { data: session, status } = useSession();
+
+  console.log('seesion is ', session);
+
+  const doLogout = async(evt) => {
+    evt.preventDefault();
+
+    //console.log('lets signout');
+    await signOut({redirect: true, callbackUrl: "/"});
+  }
 
   return (
     <Navbar
@@ -17,8 +32,25 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className={styles.customNavbar}>
-            <Link href="/">Login</Link>
-            <Link href="/register">Register</Link>
+
+            { status === 'authenticated' && 
+              <Fragment>
+                <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                <Nav.Link href="/bookings">My Reservations</Nav.Link>
+                { session.user.role === 'admin' &&
+                <Nav.Link href="/manage">Manage Reservations</Nav.Link>
+                }
+
+                <Nav.Link className={styles.logout} href="#" onClick={(evt) => doLogout(evt)}>Logout</Nav.Link>                               
+              </Fragment>
+            }
+
+            { status !== 'authenticated' && 
+            <Fragment>
+              <Link href="/">Login</Link>
+              <Link href="/register">Register</Link>
+            </Fragment>
+            }
         
             {/* { !isAuthenticated() &&
             <Fragment>

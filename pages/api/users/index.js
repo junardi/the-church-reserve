@@ -1,5 +1,5 @@
-import excuteQuery from "@/pages/lib/db";
-import { hashPassword } from "@/pages/lib/data-helper";
+import excuteQuery from "@/lib/db";
+import { hashPassword } from "@/lib/data-helper";
 
 
 export default async function handler(req, res) {
