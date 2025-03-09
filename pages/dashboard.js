@@ -11,7 +11,8 @@ import Calendar from 'react-calendar';
 const events = [
     'Burial', 
     'Wedding', 
-    'Baptismal'
+    'Baptismal', 
+    'House Blessings'
 ];
 
 const defaultFormFields = {
@@ -66,7 +67,7 @@ function Dashboard() {
             event: event
         };
 
-        console.log('data is ', data);
+        //console.log('data is ', data);
 
         try {
             const fetchData = await fetch('/api/bookings', {
@@ -79,7 +80,7 @@ function Dashboard() {
             });
     
             const jsonData = await fetchData.json();
-            //console.log('data is ', jsonData);
+            console.log('data is ', jsonData);
             if(jsonData.success){
                 alert('Requested booking');
                 setFormFields(defaultFormFields);
