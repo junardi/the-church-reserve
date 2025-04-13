@@ -88,6 +88,13 @@ function Bookings () {
 
     };
 
+    const checkStatus = (status) => {
+        if(status === 'pending' || status === 'approved') {
+            return 'pending';
+        }
+        return status;
+    }
+
     //console.log('bookingsList is ', bookingsList);
 
     console.log('booking to pay is ', bookingToPay);
@@ -110,8 +117,8 @@ function Bookings () {
                                     <th>Event</th>
                                     <th>Amount to Pay</th>
                                     <th>Transaction Code (If Paid)</th>
-                                 
-                                    <th>Pay If Approved</th>
+                                    <th>Reason if Not approved</th>
+                                    <th>For Payment</th>
                                     
                                 </tr>
                             </thead>
@@ -121,23 +128,23 @@ function Bookings () {
                                 {
                                     bookingsList.map((el, index) => {
 
-                                        const {amount, booking_id, date, details, event, paid, status, time, user_id, transaction_code} = el;
+                                        const {amount, booking_id, date, details, event, paid, status, time, user_id, transaction_code, reason} = el;
                                         return (
                                             <tr key={index}>
                                                 <td>{details}</td>
-                                                <td>{status}</td>
+                                                <td>{checkStatus(status)}</td>
                                                 <td>{moment(date).format("MMMM D, YYYY")}</td>
                                                 <td>{time}</td>
                                                 <td>{event}</td>
                                                 <td>{amount}</td>
                                                 <td>{transaction_code}</td>
-                                              
+                                                <td>{reason}</td>
                                                 <td>
                                                     { status === 'approved' && !paid &&
                                                         <Button onClick={() => handleShow(el)}>Pay Now</Button>
                                                     }
                                                     { status === 'pending' && !paid &&
-                                                        <span>Not yet approved</span>
+                                                        <span>Not approved</span>
                                                     }
 
                                                     { status === 'approved' && paid === 1 &&

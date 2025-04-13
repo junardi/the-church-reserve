@@ -1,6 +1,6 @@
 import { Container, Row, Col, Form, Button, Table, Modal } from "react-bootstrap";
 import MainLayout from "@/components/layouts/mainlayout";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useSession } from "next-auth/react";
 
 import moment from "moment";
@@ -12,13 +12,14 @@ function Bookings () {
 
     const [theStatus, setTheStatus] = useState('');
     const [theAmount, setTheAmount] = useState('');
+    const [theReason, setTheReason] = useState('');
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = (el) => {
         setBookingToUpdate(el);
-        setTheStatus('approved');
+        //setTheStatus('approved');
         setShow(true);
     }
 
@@ -40,6 +41,7 @@ function Bookings () {
     
             const jsonDataReserve = await fetchDataReservation.json();
             if(jsonDataReserve.data) {
+                console.log(jsonDataReserve.data);
                 setBookingsList(jsonDataReserve.data);
             }
         
@@ -53,8 +55,9 @@ function Bookings () {
     const updateBooking = async(evt) => {
         evt.preventDefault();
         const data = {
-            amount: theAmount,
+            amount: theAmount ? theAmount : 0,
             status: theStatus,
+            reason: theReason,
             booking_id: bookingToUpdate.booking_id
         };
         console.log('data to update is ', data); 
@@ -122,7 +125,7 @@ function Bookings () {
     // console.log('bookingToUpdate is ', bookingToUpdate);
 
     return (
-        <div className="mainPage">
+        <div className="mainPage manage">
             <Container>
                 <Row>
                     <Col>
@@ -131,16 +134,21 @@ function Bookings () {
                         <Table striped hover>
                             <thead>
                                 <tr>
-                                    <th>Details</th>
-                                    <th>Status</th>
+                                    
                                     <th>Date</th>
-                                    <th>Time</th>
+                                    <th>Name</th>
                                     <th>Event</th>
+                                    <th>Status</th>
+                                    {/* <th>Details</th> */}
+                                   
+                                   
+                                    <th>Time</th>
+                               
                                     <th>Amount</th>
                                     <th>Paid</th>
                                     <th>Transaction code (if paid)</th>
                                     <th>Update</th>
-                                    <th>Delete</th>
+                                    <th className="remove">Action</th>
                                 </tr>
                             </thead>
 
@@ -149,15 +157,19 @@ function Bookings () {
                                 {
                                     bookingsList.map((el, index) => {
 
-                                        const {amount, booking_id, date, details, event, paid, status, time, user_id, transaction_code} = el;
+                                        const {first_name, last_name, amount, booking_id, date, details, event, paid, status, time, user_id, transaction_code} = el;
                                         return (
                                             <tr key={index}>
-                                                <td>{details}</td>
-                                                <td>{status}</td>
+                                                
                                                 <td>{moment(date).format("MMMM D, YYYY")}</td>
+                                                <td>{first_name + ' ' + last_name}</td>
+                                                <td><strong>{event}</strong> - ({details})</td>
+                                                <td>{status}</td>
+                                                {/* <td>{details}</td> */}
+                                              
                                                 <td>{time}</td>
-                                                <td>{event}</td>
-                                                <td>{amount}</td>
+                                               
+                                                <td>{amount ? amount : ''}</td>
                                                 <td>{paid ? 'Yes' : 'No'}</td>
                                                 <td>{transaction_code}</td>
                                                 <td>
@@ -170,10 +182,13 @@ function Bookings () {
                                                         <span>Its Approved</span>
                                                     }
 
+                                                    { status === 'disapproved' &&
+                                                        <span>Disapproved</span>
+                                                    }
+
 
                                                 </td>
-
-                                                <td>
+                                                <td className="remove">
                                                     <Button variant="danger" onClick={() => deleteBooking(booking_id)}>Delete</Button>
                                                 </td>
                                             </tr>
@@ -183,6 +198,13 @@ function Bookings () {
                             
                             </tbody>
                         </Table>
+
+                        <br />
+                      
+                        <Button id="printReport" onClick={() => window.print()}>Print Report</Button>
+
+                        <br />
+                        <br />
 
                     </Col>
                 </Row>
@@ -201,18 +223,39 @@ function Bookings () {
                         <Form.Select name="theStatus" aria-label="Default select example" onChange={(e) => setTheStatus(e.target.value)}>
                             {/* <option value={bookingToUpdate.status}>{bookingToUpdate.status}</option>
                             <option value="pending">pending</option> */}
-                            <option value="approved">approved</option>
+                            <option value="">Select</option>
+                            <option value="approved">Approve</option>
+                            <option value="disapproved">Disapprove</option>
                         </Form.Select>
 
-                        <Form.Label className="pt-3" htmlFor="amount">Amount</Form.Label>
-                        <Form.Control
-                            type="number"
-                            id="amount"
-                            name="theAmount"
-                            aria-describedby="AMount"
-                            value={theAmount}
-                            onChange={(e) => setTheAmount(e.target.value)}
-                        />
+                        { theStatus === 'approved' && 
+                            <Fragment>
+                                <Form.Label className="pt-3" htmlFor="amount">Amount</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    id="amount"
+                                    name="theAmount"
+                                    aria-describedby="AMount"
+                                    value={theAmount}
+                                    onChange={(e) => setTheAmount(e.target.value)}
+                                />
+                            </Fragment>
+                        }
+
+
+                        { theStatus == 'disapproved' &&
+                            <Fragment>
+                                <Form.Label className="pt-3" htmlFor="reason">Reason</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    id="reason"
+                                    name="theReason"
+                                    aria-describedby="reason"
+                                    value={theReason}
+                                    onChange={(e) => setTheReason(e.target.value)}
+                                />
+                            </Fragment>
+                        }
 
                         <Button className="mt-3" type="submit">Update</Button>
                     </form>

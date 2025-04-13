@@ -13,7 +13,7 @@ const Header = () => {
 
   const { data: session, status } = useSession();
 
-  console.log('seesion is ', session);
+  //console.log('seesion is ', session);
 
   const doLogout = async(evt) => {
     evt.preventDefault();

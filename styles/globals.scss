@@ -346,3 +346,74 @@ code {
 
   }
 }
+
+.react-calendar__tile.highlight-date {
+  color: #d10000;
+}
+
+.timeSelections {
+
+  label {
+    color: green;
+  }
+
+  .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
+    color: red;
+  }
+
+
+}
+
+@media print {
+
+  body {
+    padding: 0px !important;
+    margin: 0px !important;
+    width: 100% !important;
+  }
+
+  .navbar {
+    display: none !important;
+  }
+
+  #mainFooter {
+    display: none !important;
+  }
+
+  #printReport {
+    display: none !important;
+  }
+
+  .mainPage .manage {
+    width: 100% !important;
+    padding: 0px !important;
+  }
+
+  .container {
+    padding: 0px !important;
+    margin: 0px !important;
+    width: 100% !important;
+  }
+
+  .row {
+    padding: 0px !important;
+    margin: 0px !important;
+    width: 100% !important;
+
+    table {
+      padding: 0px !important;
+      margin: 0px !important;
+      width: 100% !important;
+    }
+  }
+
+  h1 {
+    display: none !important;
+  }
+
+  .remove {
+    display: none !important;
+  }
+
+
+}

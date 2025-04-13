@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       try {
 
         const result = await excuteQuery({
-          query: 'SELECT * FROM bookings'
+          query: 'SELECT * FROM bookings LEFT JOIN users ON bookings.user_id = users.id;'
         });
 
         const data = {
@@ -78,13 +78,17 @@ export default async function handler(req, res) {
      
     } else if(req.method === 'PUT') {
 
-      const { amount, status, booking_id } = req.body;
+      const { amount, status, reason, booking_id } = req.body;
+      // console.log('amount ', amount);
+      // console.log('status ', status);
+      // console.log('reason ', reason);
+      // console.log('booking_id ', booking_id);
 
       try {
 
         const result = await excuteQuery({
-          query: 'UPDATE bookings SET status=?, amount=? WHERE booking_id = ?',                                                                                  
-          values: [status, amount, booking_id]
+          query: 'UPDATE bookings SET status=?, amount=?, reason=? WHERE booking_id = ?',                                                                                  
+          values: [status, amount, reason, booking_id]
         });
   
         const data = {
@@ -93,9 +97,8 @@ export default async function handler(req, res) {
         };
 
         const to = '639562490328';
-        //const to = '639662385023';
         const from = 'Saint James Parish Church';
-        const text = "Your booking is approved";
+        const text = status === 'approved' ? "Your booking is approved" : 'Your booking is disapproved';
 
         await vonage.sms.send({to, from, text})
         .then(resp => { console.log('Message sent successfully'); console.log(resp); })
@@ -105,12 +108,14 @@ export default async function handler(req, res) {
         
       } catch(error) {
 
-        const data = {
-          success: false,
-          data: {}
-        };
+        console.log('error is ', error);
+
+        // const data = {
+        //   success: false,
+        //   data: {}
+        // };
   
-        res.status(200).json(data);
+        // res.status(200).json(data);
       }    
 
     
