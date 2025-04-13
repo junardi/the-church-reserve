@@ -3,6 +3,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 const { Brand } = Navbar
 import styles from './header.styles.module.scss';
 import Link from "next/link";
+import Image from "next/image";
 
 import { useSession } from "next-auth/react";
 
@@ -27,7 +28,14 @@ const Header = () => {
       className={`${styles.headerContainer}`}
     >
       <Container>
-        <Navbar.Brand  href="/">Saint James The Greater Parish Church</Navbar.Brand>
+        <Image
+          src="/logo.jpeg"
+          width={50} 
+          height={50}
+          alt="logo"
+          style={{marginRight: '10px'}}
+        />
+        <Navbar.Brand className={styles.brand}  href="/">Saint James The Greater Parish Church</Navbar.Brand>
         
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

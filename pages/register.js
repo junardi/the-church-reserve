@@ -14,8 +14,8 @@ const defaultFormFields = {
     contact_no: '', 
     address: '',
     user_type: 'user', 
-    password: ''
-
+    password: '',
+    confirm_password: ''
 };
 
 
@@ -39,7 +39,7 @@ function Register()  {
     
 
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const { first_name, last_name, email, gender, date_of_birth, contact_no, address, password} = formFields;
+    const { first_name, last_name, email, gender, date_of_birth, contact_no, address, password, confirm_password } = formFields;
 
     const handleChange = (evt) => {
         const { name, value} = evt.target;
@@ -57,6 +57,12 @@ function Register()  {
             setErrorMessage('All fields are required');
             return;
         } 
+
+        if(confirm_password !== password) {
+            setSuccessRegister(false);
+            setErrorMessage('Password and Confirm Password do not match');
+            return;
+        }
 
         formFields.password = await hashPassword(password);
         formFields.role = 'user';
@@ -92,7 +98,7 @@ function Register()  {
     };
 
     return (
-        <div className="mainPage">
+        <div className="mainPage login">
             <Container>
             <Row>
                 <Col>
@@ -104,19 +110,19 @@ function Register()  {
                                 <div className="col-md-12">
                                     
                                     <label htmlFor="firstName">First Name</label>
-                                    <input type="text" className="form-control" id="first_name" name="first_name" onChange={handleChange}  placeholder="First Name" />                        
+                                    <input type="text" className="form-control" id="first_name" name="first_name" onChange={handleChange}  placeholder="" />                        
                                     <br />
 
                                     <label htmlFor="lastName">Last Name</label>
-                                    <input type="text" className="form-control" id="last_name" name="last_name" onChange={handleChange}  placeholder="Last Name" />                        
+                                    <input type="text" className="form-control" id="last_name" name="last_name" onChange={handleChange}  placeholder="" />                        
                                     <br />
 
-                                    <label htmlFor="email">Email</label>
-                                    <input type="text" className="form-control" id="email" name="email" onChange={handleChange} placeholder="Ex. youremail@mail.com" />
+                                    <label htmlFor="email">Username</label>
+                                    <input type="text" className="form-control" id="email" name="email" onChange={handleChange} placeholder="" />
                                     <br />
 
                                     <label htmlFor="gender">Gender</label>
-                                    <input type="text" className="form-control" id="gender" name="gender" onChange={handleChange} placeholder="Ex. Male" />
+                                    <input type="text" className="form-control" id="gender" name="gender" onChange={handleChange} placeholder="" />
                                     <br />
 
                                     <label htmlFor="dateOfBirth">Date of Birth</label>
@@ -124,15 +130,19 @@ function Register()  {
                                     <br />
 
                                     <label htmlFor="Contact No.">Contact No.</label>
-                                    <input type="text" className="form-control" id="contact_no" name="contact_no" onChange={handleChange} placeholder="Ex. +639450025521" />
+                                    <input type="text" className="form-control" id="contact_no" name="contact_no" onChange={handleChange} placeholder="" />
                                     <br />
 
                                     <label htmlFor="Address">Address</label>
-                                    <input type="text" className="form-control" id="address" name="address" onChange={handleChange} placeholder="Address" />
+                                    <input type="text" className="form-control" id="address" name="address" onChange={handleChange} placeholder="" />
                                     <br />
 
                                     <label htmlFor="password">Password</label>
-                                    <input type="password" className="form-control" id="password" name="password" onChange={handleChange} placeholder="Ex. A123@paswod" />
+                                    <input type="password" className="form-control" id="password" name="password" onChange={handleChange} placeholder="" />
+                                
+                                    <label htmlFor="confirm_password">Confirm Password</label>
+                                    <input type="password" className="form-control" id="confirm_password" name="confirm_password" onChange={handleChange} placeholder="" />
+                                
                                 </div>
                             </div>
 
