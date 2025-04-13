@@ -81,7 +81,7 @@ function Home() {
 
   return (
 
-    <div className="mainPage">
+    <div className="mainPage login">
       <Container>
         <Row>
           <Col>
@@ -90,11 +90,11 @@ function Home() {
                   <div className="row">
                       <h2>Login</h2>
                       <div className="col-md-12">
-                          <label htmlFor="email">Email</label>
-                          <input type="text" className="form-control" id="email" name="email" value={email} onChange={handleChange} placeholder="Ex. youremail@mail.com" />
+                          <label htmlFor="email">Username</label>
+                          <input type="text" className="form-control" id="email" name="email" value={email} onChange={handleChange} placeholder="" />
                           <br />
                           <label htmlFor="password">Password</label>
-                          <input type="password" className="form-control" id="password" name="password" value={password} onChange={handleChange} placeholder="Ex. A123@paswod" />
+                          <input type="password" className="form-control" id="password" name="password" value={password} onChange={handleChange} placeholder="" />
                       </div>
                   </div>
 
